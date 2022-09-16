@@ -3,10 +3,10 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 
-import "src/Contract.sol";
+import "src/PrivateSafeNFT.sol";
 
-contract TestContract is Test {
-    Contract c;
+contract PrivateSafeNFT is Test {
+    PrivateSafeNFT c;
 
     function setUp() public {
         c = new Contract();
