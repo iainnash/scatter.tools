@@ -1,39 +1,61 @@
-# <h1 align="center"> Forge Template </h1>
+# scatter/gather
+### a privacy layer for NFTs
 
-**Template repository for getting started quickly with Foundry projects**
+a. Scatter
+  a1. scatter scatters airdropped or minted nfts by burner wallets to seemly random addresses
+  a2. scatter addresses are derived from a scatterphrase
 
-![Github Actions](https://github.com/foundry-rs/forge-template/workflows/CI/badge.svg)
+b. Gather
+  b1. gather allows the user at a later date to gather nfts (tokens, and ether) into their possession for the first time
 
-## Getting Started
 
-Click "Use this template" on [GitHub](https://github.com/foundry-rs/forge-template) to create a new repository with this repo as the initial state.
+[ui]
 
-Or, if your repo already exists, run:
-```sh
-forge init
-forge build
-forge test
-```
+     [scatter]
 
-## Writing your first test
+---------------------
 
-All you need is to `import forge-std/Test.sol` and then inherit it from your test contract. Forge-std's Test contract comes with a pre-instatiated [cheatcodes environment](https://book.getfoundry.sh/cheatcodes/), the `vm`. It also has support for [ds-test](https://book.getfoundry.sh/reference/ds-test.html)-style logs and assertions. Finally, it supports Hardhat's [console.log](https://github.com/brockelmore/forge-std/blob/master/src/console.sol). The logging functionalities require `-vvvv`.
+      [gather]
 
-```solidity
-pragma solidity 0.8.10;
 
-import "forge-std/Test.sol";
+## [scatter]
 
-contract ContractTest is Test {
-    function testExample() public {
-        vm.roll(100);
-        console.log(1);
-        emit log("hi");
-        assertTrue(true);
-    }
-}
-```
+privacy.
+   [set a scatterphrase] (recommended at least 5 words)
+   [!ATCHUNG]: losing a scatterphrase means losing _all_ scattered nfts
+   [x] save this scatterphrase
 
-## Development
+access.
+   [mint a scatter key (fully transferrable)]
+   [!ATCHUNG]: losing a scatterkey means losing access to _all_ scattered nfts (key)
+   
+## [gather]
 
-This project uses [Foundry](https://getfoundry.sh). See the [book](https://book.getfoundry.sh/getting-started/installation.html) for instructions on how to install and use Foundry.
+[login with wallet]
+
+chose a scatterkey
+
+[scatterkey1] [key saved]
+[scatterkey2]
+[scatterkey3] [key saved]
+[etc]
+
+enter your scatterphrase
+[not found locally]
+
+[gathering scattered blockchain dust...]
+
+[scatter1]
+[nft] [gather]
+[ether] [gather]
+
+[scatter2]
+[nft] [gather]
+[ether] [gather]
+
+[scatter3]
+0x22323242343242343
+scatter something here
+
+
+
