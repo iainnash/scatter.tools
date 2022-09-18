@@ -1,7 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import { useCallback, useEffect, useState } from "react";
-import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
 import styles from "../styles/Home.module.css";
 import abi from "../abi/safe.json";
 import { useRouter } from "next/router";
@@ -14,19 +14,12 @@ const Home: NextPage = () => {
   const account = useAccount();
   const [loaded, setLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [chainId, setChainId] = useState(0);
-  const getChainIdSet = useCallback(async () => {
-    if (!account.connector) {
-      return;
-    }
-    setChainId(await account.connector?.getChainId());
-  }, [account]);
+  const {chain} = useNetwork();
   useEffect(() => {
     setLoaded(true);
-    getChainIdSet();
   }, []);
   const contractAddress =
-    chainId === 1000
+    chain?.id === 100
       ? process.env.NEXT_PUBLIC_GNOSIS_CONTRACT!
       : process.env.NEXT_PUBLIC_CONTRACT!;
   const { config } = usePrepareContractWrite({
@@ -44,13 +37,13 @@ const Home: NextPage = () => {
       result?.logs.forEach((log) => {
         const tokenId = parseInt(log.topics[3], 16);
         const lowerAddress = contractAddress.toLowerCase();
-        const path = `${chainId}:${lowerAddress}:${tokenId}`;
+        const path = `${chain?.id}:${lowerAddress}:${tokenId}`;
         router.push(`/token/${path}`);
         window.localStorage.setItem(
           `${path}`,
           JSON.stringify({
             key: generateKeyFile({
-              chainId,
+              chainId: chain!.id,
               contractAddress: lowerAddress,
               tokenId,
             }),
@@ -65,7 +58,7 @@ const Home: NextPage = () => {
     } catch (e: any) {
       setLoading(false);
     }
-  }, [doMintNFT, chainId, contractAddress]);
+  }, [doMintNFT, chain?.id, contractAddress]);
 
   return (
     <Page>

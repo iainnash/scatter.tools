@@ -15,8 +15,8 @@ export const Page = ({ children }: { children: any }) => (
       </section>
       <main className={styles.main}>{children}</main>
       <footer className={styles.footer}>
-        <a href="" target="_blank" rel="noopener noreferrer">
-          iain.in
+        <a href="/about" target="_blank" rel="noopener noreferrer">
+          scatter.tools
         </a>
       </footer>
     </div>

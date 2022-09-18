@@ -2,8 +2,10 @@ import { wallet } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useAccount, useNetwork } from "wagmi";
 import { HiddenNFTFinder } from "../../components/HiddenNFTFinder";
+import { OwnershipViewer } from "../../components/OwnershipViewer";
 import { Page } from "../../components/Page";
 import { TokenUnlock } from "../../components/TokenUnlock";
 import { processFile } from "../../processor";
@@ -11,6 +13,8 @@ import styles from "../../styles/Home.module.css";
 
 const ViewToken: NextPage = () => {
   const router = useRouter();
+  const { chain } = useNetwork()
+
   const [walletData, setWalletData] = useState<any>(undefined);
   const [walletStatus, setWalletStatus] = useState("LOADING");
   const [parsedArgs, setParsedArgs] = useState<{
@@ -18,6 +22,8 @@ const ViewToken: NextPage = () => {
     address?: string;
     id?: string;
   }>({ chain: undefined, address: undefined, id: undefined });
+
+  const [configStr, setConfigStr] = useState("");
 
   useEffect(() => {
     if (router.isReady) {
@@ -31,6 +37,7 @@ const ViewToken: NextPage = () => {
       } else {
         try {
           setWalletData(processFile(JSON.parse(data).key));
+          setConfigStr(JSON.parse(data).key);
           setWalletStatus("SUCCESS");
         } catch (e: any) {
           console.error(e);
@@ -38,7 +45,11 @@ const ViewToken: NextPage = () => {
         }
       }
     }
-  }, [router.isReady]);
+  }, [router.isReady, setWalletData]);
+
+  if (chain?.id && walletData && walletData.config.chainId !== chain.id.toString()) {
+    return <Page>invalid network</Page>
+  }
 
   return (
     <Page>
@@ -51,12 +62,27 @@ const ViewToken: NextPage = () => {
             unlock wallet: <TokenUnlock />
           </li>
         )}
-        {walletStatus === "SUCCESS" ? (
-          <HiddenNFTFinder walletData={walletData} />
+        {walletStatus === "SUCCESS" && walletData ? (
+          <HiddenNFTFinder
+            contractAddress={walletData.config.contractAddress}
+            walletData={walletData}
+          />
         ) : (
           <>waiting </>
         )}
-        <li>determining ownership</li>
+        <li>
+          <OwnershipViewer
+            contractAddress={walletData?.config?.contractAddress}
+            tokenId={parsedArgs.id!}
+          />
+        </li>
+        <li>
+          !!important:{" "}
+          <a download={`scatter-${parsedArgs.chain!}-${parsedArgs.id!}.ini`} href={`data:text/plain;utf-8,${encodeURIComponent(configStr)}`}>
+            download
+          </a>{" "}
+          keyfile
+        </li>
       </ol>
     </Page>
   );
