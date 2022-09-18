@@ -26,11 +26,7 @@ contract PrivateSafeNFT is ERC721 {
     }
 
     // just metadata things
-    function generateSVGPreview(uint256)
-        internal
-        pure
-        returns (bytes memory)
-    {
+    function generateSVGPreview(uint256) internal pure returns (bytes memory) {
         return "<svg><text>HELO</text></svg>";
     }
 
@@ -95,5 +91,16 @@ contract PrivateSafeNFT is ERC721 {
                 address(withdrawer),
                 _getHashKey(tokenId, pass)
             );
+    }
+
+    function computeAddresses(uint256 tokenId, string[] memory passes)
+        public
+        view
+        returns (address[] memory addresses)
+    {
+        addresses = new address[](passes.length);
+        for (uint256 i = 0; i < passes.length; i++) {
+            addresses[i] = computeAddress(tokenId, passes[i]);
+        }
     }
 }

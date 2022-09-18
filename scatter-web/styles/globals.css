@@ -1,0 +1,39 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+html, body {
+  font-family: helvetica;
+  font-size: 1.4em;
+  padding: 2em;
+}
+
+li {
+  margin-bottom: 1.3em;
+}
+
+button {
+  outline: 2px solid black;
+  border: none;
+  font-family: helvetica;
+  font-size: 1.25em;
+  padding: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  text-decoration: line-through;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
