@@ -50,6 +50,7 @@ const HiddenWalletItem = ({
       <div>
         {code && code.length > 2 ? (
           <a
+          rel="noreferrer"
             href={
               chain?.id === 100
                 ? `https://gnosisscan.io/address/${address}`

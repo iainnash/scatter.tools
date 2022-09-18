@@ -36,7 +36,7 @@ contract PrivateSafeNFT is ERC721 {
         returns (bytes memory)
     {
         return
-            abi.encodePacked("data:", contentType, ",", Base64.encode(source));
+            abi.encodePacked("data:", contentType, "base64,", Base64.encode(source));
     }
 
     function tokenURI(uint256 tokenId)
@@ -48,7 +48,7 @@ contract PrivateSafeNFT is ERC721 {
         return
             string(
                 base64Encode(
-                    "application/json;utf-8",
+                    "application/json;",
                     abi.encodePacked(
                         '{"name": "scatter [key]", "description": "this scatter key grants access to a randomly scattered set of crypto fragments", "image": "',
                         generateSVGPreview(tokenId),
