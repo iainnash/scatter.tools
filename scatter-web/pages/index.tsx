@@ -25,7 +25,10 @@ const Home: NextPage = () => {
     setLoaded(true);
     getChainIdSet();
   }, []);
-  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT!;
+  const contractAddress =
+    chainId === 1000
+      ? process.env.NEXT_PUBLIC_GNOSIS_CONTRACT!
+      : process.env.NEXT_PUBLIC_CONTRACT!;
   const { config } = usePrepareContractWrite({
     addressOrName: contractAddress,
     contractInterface: abi as any,
@@ -46,7 +49,11 @@ const Home: NextPage = () => {
         window.localStorage.setItem(
           `${path}`,
           JSON.stringify({
-            key: generateKeyFile({ chainId, contractAddress: lowerAddress, tokenId }),
+            key: generateKeyFile({
+              chainId,
+              contractAddress: lowerAddress,
+              tokenId,
+            }),
           })
         );
         const directory = JSON.parse(
@@ -62,9 +69,8 @@ const Home: NextPage = () => {
 
   return (
     <Page>
-      <div>
-        <h1>scatter</h1>
-        <p></p>
+      <h2>scatter</h2>
+      <div className={styles.action}>
         {loading ? (
           <h4>waiting for blockchain...</h4>
         ) : loaded && account.isConnected ? (
@@ -74,17 +80,18 @@ const Home: NextPage = () => {
         ) : (
           <ConnectButton />
         )}
-        <div className="detail"></div>
       </div>
+      <div className="detail"></div>
       <br />
       <br />
       <br />
       <br />
       <br />
-      <div>
-        gather
-        <TokenUnlock />
-      </div>
+      <br />
+      <br />
+      <br />
+      <h2>gather</h2>
+      <TokenUnlock />
     </Page>
   );
 };

@@ -5,7 +5,9 @@ export default async function handler(
   response: NextApiResponse
 ) {
   // import fetch from 'node-fetch';
-  const addresses = request.body.addresses!;
+  const addresses = request.body;
+  const strAddresses = addresses.map((addr: string) => `'${addr}'`).join(",");
+  console.log({strAddresses})
 
   //  Call the Dune API
   const dataResponse = await fetch(
@@ -15,11 +17,11 @@ export default async function handler(
       headers: new Headers({
         "x-dune-api-key": process.env.DUNE_API_KEY!,
         "content-type": "application/json",
-        'accept': 'application/json',
+        accept: "application/json",
       }),
       body: JSON.stringify({
         query_parameters: {
-          addresses,
+          addresses: strAddresses,
         },
       }),
     }

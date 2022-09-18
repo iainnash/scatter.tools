@@ -6,6 +6,11 @@ section.wallet {
   font-size: 0.6em;
 }
 
+.action {
+  text-align: center;
+  padding: 10px;
+}
+
 .main {
   min-height: 100vh;
   padding: 4rem 0;

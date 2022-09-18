@@ -9,22 +9,44 @@ import {
   infuraRpcUrls,
   WagmiConfig,
 } from "wagmi";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
-import { infuraProvider } from "wagmi/providers/infura";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+
+const gnosischain = {
+  id: 100,
+  chainId: 100,
+  name: "Gnosis Chain",
+  network: "gnosis-chain",
+  nativeCurrency: { name: "xDai", symbol: "xDAI", decimals: 18 },
+  rpcUrls: {
+    default: "https://rpc.gnosischain.com",
+    infura: "https://rpc.gnosischain.com",
+  },
+};
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
-    chain.mainnet,
+    gnosischain,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
       ? [chain.goerli]
       : []),
   ],
   [
-    infuraProvider({
-      apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY,
+    jsonRpcProvider({
+      rpc: (chain) => {
+        console.log({ chain });
+        if (chain.id === 100) {
+          return { http: "https://rpc.gnosischain.com" };
+        }
+        if (chain.id === 5) {
+          return {
+            http: `https://goerli.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`,
+          };
+        }
+        return {
+          http: `https://${chain.name}.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`,
+        };
+      },
     }),
-    publicProvider(),
   ]
 );
 

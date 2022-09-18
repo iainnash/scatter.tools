@@ -22,32 +22,40 @@ export const HiddenNFTFinder = ({ walletData }: { walletData: any }) => {
     chainId: parseInt(walletData.config.chainId, 10),
   });
 
-  const nftsQuery = useSWR(data && JSON.stringify(data), async (input: string) => {
-    const queryResults = await fetch('/api/query', {
-      method: 'POST',
-      body: input,
-      headers: {
-        'content-type': 'application/json',
-        'accept': 'application/json'
-      }
-    })
-    const queryResponse = await queryResults.json();
-    console.log({queryResponse})
-    return queryResponse;
-  })
+  const nftsQuery = useSWR(
+    data && JSON.stringify(data),
+    async (input: string) => {
+      const queryResults = await fetch("/api/query", {
+        method: "POST",
+        body: input,
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+        },
+      });
+      const queryResponse = await queryResults.json();
+      return queryResponse;
+    }
+  );
 
-  const queryResults = useSWR(nftsQuery.data?.body?.execution_id, async (execution_id: string) => {
-    const queryResults = await fetch(`/api/execution/${execution_id}`, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        'accept': 'application/json'
+  const queryResults = useSWR(
+    nftsQuery.data?.body?.execution_id,
+    async (execution_id: string) => {
+      const queryResults = await fetch(`/api/execution/${execution_id}`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          accept: "application/json",
+        },
+      });
+      const queryResponse = await queryResults.json();
+      if (!queryResponse.body.result) {
+        console.log("no result -- yet");
+        throw new Error("missing result");
       }
-    })
-    const queryResponse = await queryResults.json();
-    console.log({queryResponse})
-    return queryResponse;
-  })
+      return queryResponse;
+    }
+  );
 
   if (isLoading) {
     return <li>finding hidden NFTs 🔎</li>;
@@ -58,7 +66,7 @@ export const HiddenNFTFinder = ({ walletData }: { walletData: any }) => {
       <li>
         <ul>
           {data.map((address: string) => (
-            <HiddenWalletItem address={address} nfts={[]} />
+            <HiddenWalletItem address={address} key={address} />
           ))}
         </ul>
       </li>
