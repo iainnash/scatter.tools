@@ -19,7 +19,6 @@ error NotValidOwner();
 
 contract Withdrawer is
     ERC165Upgradeable
-    // EIP712Upgradeable
 {
     IERC721 nft;
     uint256 tokenId;
@@ -43,8 +42,6 @@ contract Withdrawer is
         override(ERC165Upgradeable)
         returns (bool)
     {
-        // In addition to the current interfaceId, also support previous version of the interfaceId that did not
-        // include the castVoteWithReasonAndParams() function as standard
         return
             interfaceId == type(IERC721ReceiverUpgradeable).interfaceId ||
             interfaceId == type(IERC1155ReceiverUpgradeable).interfaceId ||
